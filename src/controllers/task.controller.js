@@ -75,49 +75,30 @@ const DeleteTask = async (req, res) => {
 
 const EditTask = (req, res) => {
   const _id = req.params.id;
+
   try {
     taskModel
-      .findOneAndUpdate({ _id }, { $set: req.body }, { new: true })
-      .then((task) => {
-        if (!task) {
-          res.status(422).json({
-            message: "SomeThing Wrong !",
-          });
-        } else {
-          res.status(200).json({
-            message: "Edit Succefully",
-          });
+      .findOneAndUpdate({ _id }, { $set: req.body }, { new: true }, (err, doc) => {
+        if (err) {
+          return res.status(422).json({
+            message: "Something wrong when updating data!"
+          })
         }
-      });
+        res.status(200).json({
+          message: "Edit Succefully"
+        })
+
+      })
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
-const ChangeStatus = (req, res) => {
-  const _id = req.params.id;
-  try {
-    taskModel
-      .findOneAndUpdate({ _id }, { $set: req.body }, { new: true })
-      .then((task) => {
-        if (!task) {
-          res.status(422).json({
-            message: "SomeThing Wrong !",
-          });
-        } else {
-          res.status(200).json({
-            message: "Edit Succefully",
-          });
-        }
-      });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
+
 module.exports = {
   AddTask,
   Tasks,
   DeleteTask,
   GetTask,
   EditTask,
-  ChangeStatus,
+
 };
